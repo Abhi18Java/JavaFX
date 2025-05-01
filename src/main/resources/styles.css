@@ -1,0 +1,38 @@
+/* Global Styles */
+.root {
+    -fx-font-family: 'Segoe UI';
+    -fx-font-size: 14px;
+}
+
+/* Table Styling */
+.table-view {
+    -fx-background-color: white;
+    -fx-background-radius: 10;
+}
+
+.table-row-cell:selected {
+    -fx-background-color: #3498db;
+    -fx-text-fill: white;
+}
+
+/* Button Styling */
+.button {
+    -fx-background-radius: 5;
+    -fx-padding: 8 15;
+    -fx-cursor: hand;
+}
+
+.button:hover {
+    -fx-opacity: 0.9;
+}
+
+/* Text Field Styling */
+.text-field, .text-area {
+    -fx-background-radius: 5;
+    -fx-border-color: #bdc3c7;
+    -fx-border-radius: 5;
+}
+
+.text-field:focused, .text-area:focused {
+    -fx-border-color: #3498db;
+}

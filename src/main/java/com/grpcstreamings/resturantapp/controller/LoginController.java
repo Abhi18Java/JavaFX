@@ -5,9 +5,14 @@ import com.grpcstreamings.resturantapp.model.User;
 import com.grpcstreamings.resturantapp.util.SceneUtils;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
+import javafx.stage.Stage;
 import org.mindrot.jbcrypt.BCrypt;
 
 import java.io.IOException;
@@ -43,10 +48,32 @@ public class LoginController {
                 return;
             }
 
-            // Successful login - proceed to main application
-            showAlert("Login Successful", "Welcome back " + username, Alert.AlertType.INFORMATION);
-            // TODO: Switch to main application screen
-            // SceneUtils.changeScene(event, "/com/grpcstreamings/resturantapp/main.fxml", "Main");
+            try {
+                // Close login window
+                Stage currentStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+                currentStage.close();
+
+                // Load main dashboard
+                FXMLLoader loader = new FXMLLoader(
+                        getClass().getResource(
+                                "/com/grpcstreamings/resturantapp/fxml/main_dashboard.fxml"
+                        )
+                );
+                Parent root = loader.load();
+
+                // Get controller and set username
+                DashboardController controller = loader.getController();
+                controller.setUsername(username);  // Pass the actual username
+
+                Stage mainStage = new Stage();
+                mainStage.setTitle("Restaurant Management System");
+                mainStage.setScene(new Scene(root));
+                mainStage.show();
+
+            } catch (IOException e) {
+                showAlert("Navigation Error", "Could not load main application: " + e.getMessage());
+                e.printStackTrace();
+            }
 
         } catch (SQLException e) {
             showAlert("Database Error", "Error during login: " + e.getMessage());
