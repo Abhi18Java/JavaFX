@@ -1,0 +1,21 @@
+package com.grpcstreamings.resturantapp.util;
+
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
+
+public class DBUtil {
+
+    private static final String URL = "jdbc:mysql://localhost:3306/restaurant_db";
+    private static final String USER = "root";
+    private static final String PASSWORD = "root";
+    private static Connection connection;
+
+    public static Connection getConnection() throws SQLException {
+        try {
+            return DriverManager.getConnection(URL, USER, PASSWORD);
+        } catch (SQLException e) {
+            throw new SQLException("Failed to create new database connection", e);
+        }
+    }
+}
