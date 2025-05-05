@@ -5,18 +5,28 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.util.Objects;
 
 public class SceneUtils {
+    public static void changeRoot(ActionEvent event, String fxmlPath) throws IOException {
+        Parent root = FXMLLoader.load(
+                Objects.requireNonNull(SceneUtils.class.getResource(fxmlPath))
+        );
+        Scene scene = ((Node) event.getSource()).getScene();
+        scene.setRoot(root);
 
-    public static void changeScene(ActionEvent event, String fxmlPath, String title) throws IOException {
-        Parent root = FXMLLoader.load(SceneUtils.class.getResource(fxmlPath));
-        Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-        stage.setScene(new Scene(root));
-        stage.setTitle(title);
-        stage.show();
+        // For JavaFX 17+ you may need to re-apply CSS
+        try {
+            scene.getStylesheets().clear();
+            scene.getStylesheets().add(
+                    Objects.requireNonNull(
+                            SceneUtils.class.getResource("/styles.css")
+                    ).toExternalForm()
+            );
+        } catch (NullPointerException e) {
+            System.out.println("Stylesheet not found");
+        }
     }
-
 }

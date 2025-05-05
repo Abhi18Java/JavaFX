@@ -36,3 +36,58 @@
 .text-field:focused, .text-area:focused {
     -fx-border-color: #3498db;
 }
+
+/* Ensure form elements stay centered */
+.grid-pane {
+    -fx-alignment: center;
+}
+
+/* Add padding to form elements */
+.text-field, .password-field {
+    -fx-pref-width: 200px;
+}
+
+/* Style hyperlinks */
+.hyperlink {
+    -fx-text-fill: #2980b9;
+    -fx-border-color: transparent;
+}
+
+.hyperlink:hover {
+    -fx-text-fill: #3498db;
+}
+
+/* Prevent text fields from expanding */
+.text-field, .password-field {
+    -fx-max-width: 200px;
+}
+
+/* Center-align all buttons */
+.button {
+    -fx-alignment: center;
+}
+
+/* Constrain hyperlink width */
+.hyperlink {
+    -fx-max-width: 200px;
+    -fx-text-alignment: center;
+}
+
+/* Add to styles.css */
+.stack-pane {
+    -fx-alignment: center;
+}
+
+.v-box {
+    -fx-alignment: center;
+}
+
+/* styles.css */
+.stack-pane {
+    -fx-pref-width: 400px;
+    -fx-pref-height: 500px;
+    -fx-min-width: 400px;
+    -fx-min-height: 500px;
+    -fx-max-width: 400px;
+    -fx-max-height: 500px;
+}

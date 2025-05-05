@@ -5,9 +5,14 @@ import com.grpcstreamings.resturantapp.model.User;
 import com.grpcstreamings.resturantapp.util.SceneUtils;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
+import javafx.stage.Stage;
 import org.mindrot.jbcrypt.BCrypt;
 
 import java.io.IOException;
@@ -68,14 +73,22 @@ public class RegisterController {
 
     @FXML
     private void handleLoginLink(ActionEvent event) {
-        switchToLogin(event);
+        try {
+            SceneUtils.changeRoot(
+                    event,
+                    "/com/grpcstreamings/resturantapp/fxml/login.fxml"
+            );
+        } catch (IOException e) {
+            showAlert("Navigation Error", "Error loading login screen");
+        }
     }
 
     private void switchToLogin(ActionEvent event) {
         try {
-            SceneUtils.changeScene(event,
-                    "/com/grpcstreamings/resturantapp/fxml/login.fxml",
-                    "Login");
+            SceneUtils.changeRoot(
+                    event,
+                    "/com/grpcstreamings/resturantapp/fxml/login.fxml"
+            );
         } catch (IOException e) {
             showAlert("Navigation Error", "Error loading login screen: " + e.getMessage());
         }

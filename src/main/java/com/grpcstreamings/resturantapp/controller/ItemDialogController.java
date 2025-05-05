@@ -23,6 +23,7 @@ public class ItemDialogController {
 
     private Item currentItem;
     private Stage dialogStage;
+    private boolean saved = false;
 
     public void setDialogStage(Stage dialogStage) {
         this.dialogStage = dialogStage;
@@ -50,13 +51,17 @@ public class ItemDialogController {
                             Double.parseDouble(vatField.getText())
                     );
                     ItemDAO.createItem(newItem);
+                    showAlert("Success", "Item added successfully!", Alert.AlertType.INFORMATION);
                 } else { // Existing item
                     currentItem.setName(nameField.getText());
                     currentItem.setDescription(descriptionField.getText());
                     currentItem.setPrice(Double.parseDouble(priceField.getText()));
                     currentItem.setVat(Double.parseDouble(vatField.getText()));
                     ItemDAO.updateItem(currentItem);
+                    showAlert("Success", "Item updated successfully!", Alert.AlertType.INFORMATION);
                 }
+                saved = true;
+                dialogStage.close();
             }catch (SQLException | NumberFormatException e) {
                 showError("Save Error", "Failed to save item: " + e.getMessage());
 
@@ -67,6 +72,19 @@ public class ItemDialogController {
     @FXML
     private void handleCancel() {
         dialogStage.close();
+    }
+
+    public boolean isSaved() {
+        return saved;
+    }
+
+    private void showAlert(String title, String message, Alert.AlertType type) {
+        Alert alert = new Alert(type);
+        alert.initOwner(dialogStage);
+        alert.setTitle(title);
+        alert.setHeaderText(null);
+        alert.setContentText(message);
+        alert.showAndWait();
     }
 
     private boolean validateInput() {

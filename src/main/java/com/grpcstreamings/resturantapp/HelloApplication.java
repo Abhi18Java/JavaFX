@@ -4,15 +4,25 @@ import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.image.Image;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.Objects;
 
 public class HelloApplication extends Application {
     @Override
     public void start(Stage stage) throws IOException {
-        // Load the login screen first
+
+        InputStream iconStream = getClass().getResourceAsStream("/icons/icon.png");
+        if (iconStream != null) {
+            Image icon = new Image(iconStream);
+            stage.getIcons().add(icon);
+        } else {
+            System.err.println("Icon not found! Check file path");
+        }
+
         Parent root = FXMLLoader.load(
                 Objects.requireNonNull(getClass().getResource(
                         "/com/grpcstreamings/resturantapp/fxml/login.fxml")
@@ -24,9 +34,10 @@ public class HelloApplication extends Application {
                 Objects.requireNonNull(getClass().getResource("/styles.css")).toExternalForm()
         );
 
-        stage.setTitle("Restaurant App Login");
+        stage.setTitle("Login");
         stage.setScene(scene);
-        stage.setResizable(false); // Optional: Prevent resizing
+        stage.setMaximized(true);
+        stage.setResizable(true);
         stage.show();
     }
 

@@ -2,6 +2,7 @@ package com.grpcstreamings.resturantapp.controller;
 
 import com.grpcstreamings.resturantapp.dao.ItemDAO;
 import com.grpcstreamings.resturantapp.model.Item;
+import javafx.beans.Observable;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
@@ -10,12 +11,13 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
-import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.image.Image;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.sql.SQLException;
+import java.util.Objects;
 
 public class ItemsController {
 
@@ -28,7 +30,14 @@ public class ItemsController {
     @FXML private TextField searchField;
     @FXML private Label statusLabel;
 
-    private ObservableList<Item> items = FXCollections.observableArrayList();
+    private ObservableList<Item> items = FXCollections.observableArrayList(
+            item -> new Observable[] {
+                    item.nameProperty(),
+                    item.descriptionProperty(),
+                    item.priceProperty(),
+                    item.vatProperty()
+            }
+    );
 
     @FXML
     public void initialize() {
@@ -38,8 +47,12 @@ public class ItemsController {
     }
 
     private void configureTable() {
-        nameColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
-        descriptionColumn.setCellValueFactory(new PropertyValueFactory<>("description"));
+        nameColumn.setCellValueFactory(cellData -> cellData.getValue().nameProperty());
+        descriptionColumn.setCellValueFactory(cellData -> cellData.getValue().descriptionProperty());
+
+        priceColumn.setCellValueFactory(cellData -> cellData.getValue().priceProperty().asObject());
+        vatColumn.setCellValueFactory(cellData -> cellData.getValue().vatProperty().asObject());
+
         priceColumn.setCellFactory(col -> new TableCell<Item, Double>() {
             @Override
             protected void updateItem(Double price, boolean empty) {
@@ -47,6 +60,7 @@ public class ItemsController {
                 setText(empty ? "" : String.format("$%.2f", price));
             }
         });
+
         vatColumn.setCellFactory(col -> new TableCell<Item, Double>() {
             @Override
             protected void updateItem(Double vat, boolean empty) {
@@ -60,6 +74,7 @@ public class ItemsController {
         try {
             items.setAll(ItemDAO.getAllItems());
             itemsTable.setItems(items);
+            itemsTable.refresh();  //Auto Refresh
             statusLabel.setText("Loaded " + items.size() + " items");
         } catch (SQLException e) {
             showError("Database Error", "Failed to load items: " + e.getMessage());
@@ -94,6 +109,9 @@ public class ItemsController {
             controller.setDialogStage(stage);
             stage.setScene(new Scene(root));
             stage.initModality(Modality.APPLICATION_MODAL);
+            stage.getIcons().add(new Image(
+                    Objects.requireNonNull(getClass().getResourceAsStream("/icons/icon.png"))
+            ));
             stage.showAndWait();
 
             loadItems(); // Refresh table after dialog closes

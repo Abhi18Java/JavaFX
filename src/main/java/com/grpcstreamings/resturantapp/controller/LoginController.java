@@ -12,11 +12,13 @@ import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
+import javafx.scene.image.Image;
 import javafx.stage.Stage;
 import org.mindrot.jbcrypt.BCrypt;
 
 import java.io.IOException;
 import java.sql.SQLException;
+import java.util.Objects;
 
 public class LoginController {
     @FXML
@@ -49,11 +51,6 @@ public class LoginController {
             }
 
             try {
-                // Close login window
-                Stage currentStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-                currentStage.close();
-
-                // Load main dashboard
                 FXMLLoader loader = new FXMLLoader(
                         getClass().getResource(
                                 "/com/grpcstreamings/resturantapp/fxml/main_dashboard.fxml"
@@ -61,14 +58,20 @@ public class LoginController {
                 );
                 Parent root = loader.load();
 
-                // Get controller and set username
                 DashboardController controller = loader.getController();
-                controller.setUsername(username);  // Pass the actual username
+                controller.setUsername(username);
 
                 Stage mainStage = new Stage();
                 mainStage.setTitle("Restaurant Management System");
                 mainStage.setScene(new Scene(root));
+                mainStage.setMaximized(true);
+                mainStage.getIcons().add(new Image(
+                        Objects.requireNonNull(getClass().getResourceAsStream("/icons/icon.png"))
+                ));
                 mainStage.show();
+
+                // Close login window
+                ((Node) event.getSource()).getScene().getWindow().hide();
 
             } catch (IOException e) {
                 showAlert("Navigation Error", "Could not load main application: " + e.getMessage());
@@ -84,11 +87,12 @@ public class LoginController {
     @FXML
     private void handleRegisterLink(ActionEvent event) {
         try {
-            SceneUtils.changeScene(event,
-                    "/com/grpcstreamings/resturantapp/fxml/register.fxml",
-                    "Register");
+            SceneUtils.changeRoot(
+                    event,
+                    "/com/grpcstreamings/resturantapp/fxml/register.fxml"
+            );
         } catch (IOException e) {
-            showAlert("Navigation Error", "Error loading registration form: " + e.getMessage());
+            showAlert("Navigation Error", "Error loading registration form");
         }
     }
 
