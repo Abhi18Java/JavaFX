@@ -22,6 +22,23 @@ public class ItemDAO {
         }
     }
 
+    public static boolean isExist(String name, String description, double price) throws SQLException {
+        String sql = "SELECT COUNT(*) FROM items WHERE name = ? AND description = ? AND price = ?";
+        try (Connection conn = DBUtil.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setString(1, name);
+            stmt.setString(2, description);
+            stmt.setDouble(3, price);
+
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
+                    return rs.getInt(1) > 0;
+                }
+            }
+        }
+        return false;
+    }
+
     public static ObservableList<Item> getAllItems() throws SQLException {
         ObservableList<Item> items = FXCollections.observableArrayList();
         String sql = "SELECT * FROM items";

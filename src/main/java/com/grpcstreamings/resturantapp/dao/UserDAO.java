@@ -11,14 +11,15 @@ import java.sql.SQLException;
 public class UserDAO {
 
     public static void createUser(User user) throws SQLException {
-        String sql = "INSERT INTO users (username, password_hash) VALUES (?, ?)";
+        String sql = "INSERT INTO users (username, email, password_hash) VALUES (?, ?, ?)";
 
         // Use try-with-resources for both Connection and PreparedStatement
         try (Connection conn = DBUtil.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
 
             stmt.setString(1, user.getUsername());
-            stmt.setString(2, user.getPasswordHash());
+            stmt.setString(2, user.getEmail());
+            stmt.setString(3, user.getPasswordHash());
             stmt.executeUpdate();
         }
     }

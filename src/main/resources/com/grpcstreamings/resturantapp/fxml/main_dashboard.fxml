@@ -2,7 +2,6 @@
 
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
-
 <BorderPane xmlns="http://javafx.com/javafx/17"
             xmlns:fx="http://javafx.com/fxml/1"
             fx:controller="com.grpcstreamings.resturantapp.controller.DashboardController"
@@ -11,7 +10,7 @@
             prefHeight="500">
 
     <top>
-        <VBox style="-fx-background-color: #960f0f; -fx-padding: 15;">
+        <VBox style="-fx-background-color: #d4081d; -fx-padding: 15;">
             <Label text="Restaurant Management System"
                    style="-fx-text-fill: white; -fx-font-size: 24; -fx-font-weight: bold;"/>
         </VBox>
@@ -19,19 +18,26 @@
 
     <center>
         <StackPane>
-        <VBox alignment="TOP_LEFT" spacing="20">
-            <Button text="Manage Items"
-                    style="-fx-font-size: 16; -fx-pref-width: 200; -fx-background-color: #08704a; -fx-text-fill: white;"
-                    onAction="#handleItemsManagement"/>
+            <VBox alignment="TOP_LEFT" spacing="20">
+                <Button text="Manage Items"
+                        fx:id="manageItemsBtn"
+                        onAction="#handleItemsManagement"
+                        styleClass="vending-style"/>
 
-<!--            <Button text="Manage Sales"-->
-<!--                    style="-fx-font-size: 16; -fx-pref-width: 200;"-->
-<!--                    onAction="#handleSalesManagement"/>-->
+                <!--            <Button text="Manage Sales"-->
+                <!--                    style="-fx-font-size: 16; -fx-pref-width: 200;"-->
+                <!--                    onAction="#handleSalesManagement"/>-->
 
-<!--            <Button text="Generate Reports"-->
-<!--                    style="-fx-font-size: 16; -fx-pref-width: 200;"-->
-<!--                    onAction="#handleReports"/>-->
-        </VBox>
+                <!--            <Button text="Generate Reports"-->
+                <!--                    style="-fx-font-size: 16; -fx-pref-width: 200;"-->
+                <!--                    onAction="#handleReports"/>-->
+
+            </VBox>
+            <Button text="Logout"
+                    fx:id="logoutBtn"
+                    onAction="#handleLogout"
+                    styleClass="logout-button"
+                    StackPane.alignment="BOTTOM_RIGHT" />
         </StackPane>
     </center>
 

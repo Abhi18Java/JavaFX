@@ -5,14 +5,9 @@ import com.grpcstreamings.resturantapp.model.User;
 import com.grpcstreamings.resturantapp.util.SceneUtils;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Node;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
-import javafx.stage.Stage;
 import org.mindrot.jbcrypt.BCrypt;
 
 import java.io.IOException;
@@ -20,24 +15,36 @@ import java.sql.SQLException;
 
 public class RegisterController {
 
-    @FXML private TextField usernameField;
-    @FXML private PasswordField passwordField;
-    @FXML private PasswordField confirmPasswordField;
+    @FXML
+    private TextField usernameField;
+    @FXML
+    private TextField emailField;
+    @FXML
+    private PasswordField passwordField;
+    @FXML
+    private PasswordField confirmPasswordField;
 
     @FXML
     private void handleRegister(ActionEvent event) {
         String username = usernameField.getText().trim();
+        String email = emailField.getText().trim();
         String password = passwordField.getText();
         String confirmPassword = confirmPasswordField.getText();
 
-        if (username.isEmpty() || password.isEmpty()) {
-            showAlert("Input Error", "Username and password cannot be empty!");
+        if (username.isEmpty() || email.isEmpty() || password.isEmpty()) {
+            showAlert("Input Error", "All Fields are required!");
             return;
         }
 
         if (username.length() < 4 || username.length() > 20) {
             showAlert("Invalid Username",
                     "Username must be between 4-20 characters");
+            return;
+        }
+
+        if (!isValidEmail(email)) {
+            showAlert("Invalid Email",
+                    "Invalid email format, Please enter correct email");
             return;
         }
 
@@ -59,7 +66,7 @@ public class RegisterController {
             }
 
             String hashedPassword = BCrypt.hashpw(password, BCrypt.gensalt());
-            User newUser = new User(username, hashedPassword);
+            User newUser = new User(username, email, hashedPassword);
             UserDAO.createUser(newUser);
 
             showAlert("Success", "Registration successful!", Alert.AlertType.INFORMATION);
@@ -92,6 +99,11 @@ public class RegisterController {
         } catch (IOException e) {
             showAlert("Navigation Error", "Error loading login screen: " + e.getMessage());
         }
+    }
+
+    private boolean isValidEmail(String email) {
+        String emailRegex = "^[A-Za-z0-9+_.-]+@(.+)$";
+        return email.matches(emailRegex);
     }
 
     private void showAlert(String title, String message) {

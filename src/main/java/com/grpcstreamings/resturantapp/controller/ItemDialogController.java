@@ -43,28 +43,39 @@ public class ItemDialogController {
     private void handleSaveItem() {
         if (validateInput()) {
             try {
+                String name = nameField.getText();
+                String description = descriptionField.getText();
+                double price = Double.parseDouble(priceField.getText());
+                double vat = Double.parseDouble(vatField.getText());
+
                 if (currentItem == null) {
-                    Item newItem = new Item(0,
-                            nameField.getText(),
-                            descriptionField.getText(),
-                            Double.parseDouble(priceField.getText()),
-                            Double.parseDouble(vatField.getText())
-                    );
+                    // Check for duplicate for new item
+                    if (ItemDAO.isExist(name, description, price)) {
+                        showAlert("Duplicate Item", "An item with the same name, description, and price already exists.", Alert.AlertType.ERROR);
+                        return;
+                    }
+                    Item newItem = new Item(0, name, description, price, vat);
                     ItemDAO.createItem(newItem);
                     showAlert("Success", "Item added successfully!", Alert.AlertType.INFORMATION);
-                } else { // Existing item
-                    currentItem.setName(nameField.getText());
-                    currentItem.setDescription(descriptionField.getText());
-                    currentItem.setPrice(Double.parseDouble(priceField.getText()));
-                    currentItem.setVat(Double.parseDouble(vatField.getText()));
+                } else {
+                    if (ItemDAO.isExist(name, description, price)) {
+                        showAlert("Duplicate Item", "Another item with the same name, description, and price already exists.", Alert.AlertType.ERROR);
+                        return;
+                    }
+                    currentItem.setName(name);
+                    currentItem.setDescription(description);
+                    currentItem.setPrice(price);
+                    currentItem.setVat(vat);
                     ItemDAO.updateItem(currentItem);
                     showAlert("Success", "Item updated successfully!", Alert.AlertType.INFORMATION);
                 }
                 saved = true;
                 dialogStage.close();
-            }catch (SQLException | NumberFormatException e) {
+            } catch (SQLException | NumberFormatException e) {
                 showError("Save Error", "Failed to save item: " + e.getMessage());
-
+            }
+            finally {
+                dialogStage.close();
             }
         }
     }
@@ -106,7 +117,7 @@ public class ItemDialogController {
             if (vat < 0 || vat > 100) {
                 errors.append("Vat must be between 0-100\n");
             }
-        }catch (NumberFormatException e) {
+        } catch (NumberFormatException e) {
             errors.append("Invalid VAT format\n");
         }
 

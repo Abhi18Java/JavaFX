@@ -1,6 +1,44 @@
 .root {
-    -fx-background-image: url("icons/icon.png");
+    -fx-background-image: url("icons/background.png");
     -fx-background-repeat: no-repeat;
     -fx-background-size: cover;
     -fx-background-position: center center;
+}
+
+.vending-style {
+    -fx-font-size: 20px;
+    -fx-font-weight: bold;
+    -fx-text-fill: white;
+    -fx-background-color: linear-gradient(to bottom, #00bcd4, #008ba3); /* teal gradient */
+    -fx-background-radius: 20;           /* rounded corners */
+    -fx-border-radius: 20;
+    -fx-padding: 16px 40px;              /* makes it big and touch-friendly */
+    -fx-border-color: #ffffff;
+    -fx-border-width: 2;
+    -fx-cursor: hand;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.3), 8, 0.3, 0, 4);
+}
+
+.logout-button {
+    -fx-background-color: #e74c3c; /* Red color */
+    -fx-text-fill: white;
+    -fx-font-size: 16px;
+    -fx-padding: 10px 20px;
+    -fx-background-radius: 10;
+    -fx-cursor: hand;
+    -fx-font-weight: bold;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.3), 5, 0.0, 2, 2);
+}
+
+.logout-button:hover {
+    -fx-background-color: #c0392b; /* Darker red on hover */
+}
+
+
+.vending-style:hover {
+    -fx-background-color: linear-gradient(to bottom, #26c6da, #0097a7);
+}
+
+.vending-style:pressed {
+    -fx-background-color: linear-gradient(to bottom, #008ba3, #006978);
 }

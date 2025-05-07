@@ -10,7 +10,7 @@
             style="-fx-background-color: #f5f6fa;">
 
     <top>
-        <VBox spacing="10" style="-fx-background-color: #960f0f; -fx-padding: 15;">
+        <VBox spacing="10" style="-fx-background-color: #7cb8c4; -fx-padding: 15;">
             <HBox spacing="10" alignment="CENTER_LEFT">
                 <Label text="Items Management" style="-fx-text-fill: white; -fx-font-size: 24; -fx-font-weight: bold;"/>
                 <Button text="Add New Item" style="-fx-background-color: #27ae60; -fx-text-fill: white;" onAction="#handleAddItem"/>
