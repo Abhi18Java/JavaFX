@@ -2,12 +2,15 @@ package com.grpcstreamings.resturantapp.controller;
 
 import com.grpcstreamings.resturantapp.dao.ItemDAO;
 import com.grpcstreamings.resturantapp.model.Item;
+import com.grpcstreamings.resturantapp.util.SceneUtils;
 import javafx.beans.Observable;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
@@ -23,15 +26,27 @@ public class ItemsController {
 
     @FXML
     private TableView<Item> itemsTable;
-    @FXML private TableColumn<Item, String> nameColumn;
-    @FXML private TableColumn<Item, String> descriptionColumn;
-    @FXML private TableColumn<Item, Double> priceColumn;
-    @FXML private TableColumn<Item, Double> vatColumn;
-    @FXML private TextField searchField;
-    @FXML private Label statusLabel;
+    @FXML
+    private TableColumn<Item, String> nameColumn;
+    @FXML
+    private TableColumn<Item, String> descriptionColumn;
+    @FXML
+    private TableColumn<Item, Double> priceColumn;
+    @FXML
+    private TableColumn<Item, Double> vatColumn;
+    @FXML
+    private TextField searchField;
+    @FXML
+    private Label statusLabel;
+
+    private Stage primaryStage;
+
+    public void setPrimaryStage(Stage primaryStage) {
+        this.primaryStage = primaryStage;
+    }
 
     private ObservableList<Item> items = FXCollections.observableArrayList(
-            item -> new Observable[] {
+            item -> new Observable[]{
                     item.nameProperty(),
                     item.descriptionProperty(),
                     item.priceProperty(),
@@ -94,6 +109,13 @@ public class ItemsController {
         } else {
             showError("Selection Error", "Please select an item to edit");
         }
+    }
+
+    @FXML
+    private void handleBack(ActionEvent event) {
+        primaryStage.show();
+        Stage currentStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+        currentStage.close();
     }
 
     private void showItemDialog(Item item) {

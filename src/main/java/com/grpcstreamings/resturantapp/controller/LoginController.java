@@ -37,12 +37,6 @@ public class LoginController {
             return;
         }
 
-        if (username.length() < 4 || username.length() > 20) {
-            showAlert("Invalid Username",
-                    "Username must be between 4-20 characters");
-            return;
-        }
-
         try {
             User user = UserDAO.findByUsername(username);
             if (user == null || !BCrypt.checkpw(password, user.getPasswordHash())) {

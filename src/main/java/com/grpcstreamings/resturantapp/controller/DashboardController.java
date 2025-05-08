@@ -4,6 +4,7 @@ import com.grpcstreamings.resturantapp.util.SceneUtils;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
@@ -25,21 +26,36 @@ public class DashboardController {
     }
 
     @FXML
-    private void handleItemsManagement() {
+    private void handleItemsManagement(ActionEvent event) {
         try {
-            Parent root = FXMLLoader.load(
-                    getClass().getResource(
-                            "/com/grpcstreamings/resturantapp/fxml/items_management.fxml"
-                    )
-            );
-            Stage stage = new Stage();
-            stage.setTitle("Items Management");
-            stage.setScene(new Scene(root));
-            stage.setMaximized(true);
-            stage.getIcons().add(new Image(
+
+            Stage primaryStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+            primaryStage.hide();
+
+            FXMLLoader loader = new FXMLLoader(getClass().getResource(
+                    "/com/grpcstreamings/resturantapp/fxml/items_management.fxml"
+            ));
+            Parent root = loader.load();
+
+            // Pass primary stage to the secondary controller
+            ItemsController itemsController = loader.getController();
+            itemsController.setPrimaryStage(primaryStage);
+
+            // Configure the secondary stage
+            Stage secondaryStage = new Stage();
+            secondaryStage.setScene(new Scene(root));
+            secondaryStage.setTitle("Items Management");
+            secondaryStage.setMaximized(true);
+            secondaryStage.getIcons().add(new Image(
                     Objects.requireNonNull(getClass().getResourceAsStream("/icons/icon.png"))
             ));
-            stage.show();
+
+            // Critical: Re-show primary stage when secondary is closed
+            secondaryStage.setOnCloseRequest(e -> {
+                primaryStage.show(); // Show primary stage when secondary is closed
+            });
+
+            secondaryStage.show();
 
         } catch (IOException e) {
             e.printStackTrace();
@@ -60,8 +76,38 @@ public class DashboardController {
     }
 
     @FXML
-    private void handleSalesManagement() {
-        // Implement sales management navigation
+    private void handleSalesManagement(ActionEvent event) {
+        try {
+            Stage primaryStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+            primaryStage.hide();
+
+            FXMLLoader loader = new FXMLLoader(getClass().getResource(
+                    "/com/grpcstreamings/resturantapp/fxml/sales_management.fxml"
+            ));
+            Parent root = loader.load();
+
+            // Pass primary stage to the secondary controller
+            SalesController salesController = loader.getController();
+            salesController.setPrimaryStage(primaryStage);
+
+            // Configure the secondary stage
+            Stage secondaryStage = new Stage();
+            secondaryStage.setScene(new Scene(root));
+            secondaryStage.setTitle("Sales Management");
+            secondaryStage.setMaximized(true);
+            secondaryStage.getIcons().add(new Image(
+                    Objects.requireNonNull(getClass().getResourceAsStream("/icons/icon.png"))
+            ));
+
+            secondaryStage.setOnCloseRequest(e -> {
+                primaryStage.show();
+            });
+
+            secondaryStage.show();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     @FXML

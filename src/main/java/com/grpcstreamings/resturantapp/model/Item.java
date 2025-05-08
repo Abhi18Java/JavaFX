@@ -81,4 +81,12 @@ public class Item {
     public void setVat(double vat) {
         this.vat.set(vat);
     }
+
+    @Override
+    public String toString() {
+        return name.get() +
+                description.get() +
+                price.get() +
+                vat.get();
+    }
 }

@@ -16,6 +16,7 @@
                 <Button text="Add New Item" style="-fx-background-color: #27ae60; -fx-text-fill: white;" onAction="#handleAddItem"/>
                 <Button text="Edit Item" style="-fx-background-color: #2980b9; -fx-text-fill: white;" onAction="#handleEditItem"/>
                 <Button text="Delete Item" style="-fx-background-color: #c0392b; -fx-text-fill: white;" onAction="#handleDeleteItem"/>
+                <Button text="Back" onAction="#handleBack" style="-fx-background-color: #95a5a6;"/>
             </HBox>
             <TextField fx:id="searchField" promptText="Search items..." style="-fx-background-radius: 15;"/>
         </VBox>

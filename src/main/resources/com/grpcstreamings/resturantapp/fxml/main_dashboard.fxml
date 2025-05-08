@@ -24,9 +24,11 @@
                         onAction="#handleItemsManagement"
                         styleClass="vending-style"/>
 
-                <!--            <Button text="Manage Sales"-->
-                <!--                    style="-fx-font-size: 16; -fx-pref-width: 200;"-->
-                <!--                    onAction="#handleSalesManagement"/>-->
+                <Button text="Manage Sales"
+                        fx:id="manageSalesBtn"
+                        onAction="#handleSalesManagement"
+                        styleClass="vending-style"/>
+
 
                 <!--            <Button text="Generate Reports"-->
                 <!--                    style="-fx-font-size: 16; -fx-pref-width: 200;"-->
@@ -37,7 +39,7 @@
                     fx:id="logoutBtn"
                     onAction="#handleLogout"
                     styleClass="logout-button"
-                    StackPane.alignment="BOTTOM_RIGHT" />
+                    StackPane.alignment="BOTTOM_RIGHT"/>
         </StackPane>
     </center>
 
