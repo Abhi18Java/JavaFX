@@ -3,6 +3,7 @@ package com.grpcstreamings.resturantapp.controller;
 import com.grpcstreamings.resturantapp.dao.UserDAO;
 import com.grpcstreamings.resturantapp.model.User;
 import com.grpcstreamings.resturantapp.util.SceneUtils;
+import com.grpcstreamings.resturantapp.util.SessionManager;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -43,6 +44,8 @@ public class LoginController {
                 showAlert("Login Failed", "Invalid username or password");
                 return;
             }
+
+            SessionManager.setCurrentUser(user);
 
             try {
                 FXMLLoader loader = new FXMLLoader(

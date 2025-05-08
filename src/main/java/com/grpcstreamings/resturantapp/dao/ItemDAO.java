@@ -9,8 +9,8 @@ import java.sql.*;
 
 public class ItemDAO {
 
-    public static void createItem(Item item) throws SQLException {
-        String sql = "INSERT INTO items (name, description, price, vat) VALUES (?, ?, ?, ?)";
+    public static void createItem(Item item, int userId) throws SQLException {
+        String sql = "INSERT INTO items (name, description, price, vat, user_id) VALUES (?, ?, ?, ?, ?)";
         try (Connection conn = DBUtil.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
 
@@ -18,6 +18,7 @@ public class ItemDAO {
             stmt.setString(2, item.getDescription());
             stmt.setDouble(3, item.getPrice());
             stmt.setDouble(4, item.getVat());
+            stmt.setInt(5, userId);
             stmt.executeUpdate();
         }
     }
@@ -39,52 +40,57 @@ public class ItemDAO {
         return false;
     }
 
-    public static ObservableList<Item> getAllItems() throws SQLException {
+    public static ObservableList<Item> getAllItems(int userId) throws SQLException {
         ObservableList<Item> items = FXCollections.observableArrayList();
-        String sql = "SELECT * FROM items";
+        String sql = "SELECT * FROM items WHERE user_id = ?";
 
         try (Connection conn = DBUtil.getConnection();
-             Statement stmt = conn.createStatement();
-             ResultSet rs = stmt.executeQuery(sql)) {
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
 
-            while (rs.next()) {
-                items.add(new Item(
-                        rs.getInt("id"),
-                        rs.getString("name"),
-                        rs.getString("description"),
-                        rs.getDouble("price"),
-                        rs.getDouble("vat")
-                ));
+            stmt.setInt(1, userId);
+
+            try (ResultSet rs = stmt.executeQuery()) {
+                while (rs.next()) {
+                    items.add(new Item(
+                            rs.getInt("id"),
+                            rs.getString("name"),
+                            rs.getString("description"),
+                            rs.getDouble("price"),
+                            rs.getDouble("vat")
+                    ));
+                }
             }
         }
         return items;
     }
 
-    public static void updateItem(Item item) throws SQLException {
-        String slq = "UPDATE items SET name = ?, description = ?, price = ?, vat = ? WHERE id = ?";
+    public static void updateItem(Item item, int userId) throws SQLException {
+        String sql = "UPDATE items SET name = ?, description = ?, price = ?, vat = ? WHERE id = ? AND user_id = ?";
 
-        try (Connection conn = DBUtil.getConnection()) {
-            PreparedStatement stmt = conn.prepareStatement(slq);
+        try (Connection conn = DBUtil.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
 
             stmt.setString(1, item.getName());
             stmt.setString(2, item.getDescription());
             stmt.setDouble(3, item.getPrice());
             stmt.setDouble(4, item.getVat());
             stmt.setInt(5, item.getId());
+            stmt.setInt(6, userId);
             stmt.executeUpdate();
         }
     }
 
-    public static void deleteItem(int id) throws SQLException {
-        String sql = "Delete from items WHERE id = ?";
+    public static void deleteItem(int id, int userId) throws SQLException {
+        String sql = "DELETE FROM items WHERE id = ? AND user_id = ?";
 
-        try (Connection conn = DBUtil.getConnection()) {
-            PreparedStatement stmt = conn.prepareStatement(sql);
+        try (Connection conn = DBUtil.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
 
             stmt.setInt(1, id);
+            stmt.setInt(2, userId);
             stmt.executeUpdate();
-
         }
     }
+
 
 }

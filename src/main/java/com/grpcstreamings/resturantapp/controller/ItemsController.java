@@ -2,7 +2,7 @@ package com.grpcstreamings.resturantapp.controller;
 
 import com.grpcstreamings.resturantapp.dao.ItemDAO;
 import com.grpcstreamings.resturantapp.model.Item;
-import com.grpcstreamings.resturantapp.util.SceneUtils;
+import com.grpcstreamings.resturantapp.util.SessionManager;
 import javafx.beans.Observable;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -44,6 +44,8 @@ public class ItemsController {
     public void setPrimaryStage(Stage primaryStage) {
         this.primaryStage = primaryStage;
     }
+
+    int userId = SessionManager.getCurrentUser().getId();
 
     private ObservableList<Item> items = FXCollections.observableArrayList(
             item -> new Observable[]{
@@ -87,7 +89,7 @@ public class ItemsController {
 
     private void loadItems() {
         try {
-            items.setAll(ItemDAO.getAllItems());
+            items.setAll(ItemDAO.getAllItems(userId));
             itemsTable.setItems(items);
             itemsTable.refresh();  //Auto Refresh
             statusLabel.setText("Loaded " + items.size() + " items");
@@ -158,7 +160,7 @@ public class ItemsController {
                     "Are you sure you want to delete '" + selected.getName() + "'?")) {
 
                 try {
-                    ItemDAO.deleteItem(selected.getId());
+                    ItemDAO.deleteItem(selected.getId(), userId);
                     loadItems();
                     statusLabel.setText("Item deleted successfully");
                 } catch (SQLException e) {

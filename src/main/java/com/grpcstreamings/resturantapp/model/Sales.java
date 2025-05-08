@@ -14,8 +14,20 @@ public class Sales {
     private final SimpleDoubleProperty tip = new SimpleDoubleProperty();
     private final SimpleDoubleProperty serviceTax = new SimpleDoubleProperty();
     private final SimpleObjectProperty<LocalDateTime> saleDate = new SimpleObjectProperty<>();
+    private final SimpleIntegerProperty userId = new SimpleIntegerProperty();
 
     public Sales() {
+    }
+
+    public Sales(int id, Item item, int quantity, double discount, double tip, double serviceTax, LocalDateTime saleDate, int userId) {
+        this.id.set(id);
+        this.item.set(item);
+        this.quantity.set(quantity);
+        this.discount.set(discount);
+        this.tip.set(tip);
+        this.serviceTax.set(serviceTax);
+        this.saleDate.set(saleDate);
+        this.userId.set(userId);
     }
 
     public Sales(int id, Item item, int quantity, double discount, double tip, double serviceTax, LocalDateTime saleDate) {
@@ -27,7 +39,6 @@ public class Sales {
         this.serviceTax.set(serviceTax);
         this.saleDate.set(saleDate);
     }
-
 
     public double calculateFinalPrice() {
         double basePrice = item.get().getPrice() * quantity.get();
@@ -68,6 +79,10 @@ public class Sales {
         return saleDate;
     }
 
+    public SimpleIntegerProperty userIdProperty() {
+        return userId;
+    }
+
     //Simple Getters
 
     public int getId() {
@@ -98,6 +113,10 @@ public class Sales {
         return saleDate.get();
     }
 
+    public int getUserId() {
+        return userId.get();
+    }
+
     //Simple Getters
 
     public void setId(int id) {
@@ -126,6 +145,10 @@ public class Sales {
 
     public void setSaleDate(LocalDateTime saleDate) {
         this.saleDate.set(saleDate);
+    }
+
+    public void setUserId(int userId) {
+        this.userId.set(userId);
     }
 
 }

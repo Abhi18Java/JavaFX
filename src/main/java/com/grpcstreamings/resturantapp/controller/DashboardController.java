@@ -112,7 +112,7 @@ public class DashboardController {
 
     @FXML
     private void handleReports() {
-        // Implement reports navigation
+
     }
 
     private boolean showConfirmation(String title, String message) {

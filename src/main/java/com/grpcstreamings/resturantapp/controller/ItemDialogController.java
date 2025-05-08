@@ -2,6 +2,7 @@ package com.grpcstreamings.resturantapp.controller;
 
 import com.grpcstreamings.resturantapp.dao.ItemDAO;
 import com.grpcstreamings.resturantapp.model.Item;
+import com.grpcstreamings.resturantapp.util.SessionManager;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.TextArea;
@@ -24,6 +25,8 @@ public class ItemDialogController {
     private Item currentItem;
     private Stage dialogStage;
     private boolean saved = false;
+
+    int userId = 0;
 
     public void setDialogStage(Stage dialogStage) {
         this.dialogStage = dialogStage;
@@ -48,6 +51,8 @@ public class ItemDialogController {
                 double price = Double.parseDouble(priceField.getText());
                 double vat = Double.parseDouble(vatField.getText());
 
+                userId = SessionManager.getCurrentUser().getId();
+
                 if (currentItem == null) {
                     // Check for duplicate for new item
                     if (ItemDAO.isExist(name, description, price)) {
@@ -55,7 +60,8 @@ public class ItemDialogController {
                         return;
                     }
                     Item newItem = new Item(0, name, description, price, vat);
-                    ItemDAO.createItem(newItem);
+                    userId = SessionManager.getCurrentUser().getId();
+                    ItemDAO.createItem(newItem, userId);
                     showAlert("Success", "Item added successfully!", Alert.AlertType.INFORMATION);
                 } else {
                     if (ItemDAO.isExist(name, description, price)) {
@@ -66,15 +72,14 @@ public class ItemDialogController {
                     currentItem.setDescription(description);
                     currentItem.setPrice(price);
                     currentItem.setVat(vat);
-                    ItemDAO.updateItem(currentItem);
+                    ItemDAO.updateItem(currentItem, userId);
                     showAlert("Success", "Item updated successfully!", Alert.AlertType.INFORMATION);
                 }
                 saved = true;
                 dialogStage.close();
             } catch (SQLException | NumberFormatException e) {
                 showError("Save Error", "Failed to save item: " + e.getMessage());
-            }
-            finally {
+            } finally {
                 dialogStage.close();
             }
         }

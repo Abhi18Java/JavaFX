@@ -4,6 +4,8 @@ import com.grpcstreamings.resturantapp.dao.ItemDAO;
 import com.grpcstreamings.resturantapp.dao.SalesDAO;
 import com.grpcstreamings.resturantapp.model.Item;
 import com.grpcstreamings.resturantapp.model.Sales;
+import com.grpcstreamings.resturantapp.util.SessionManager;
+import javafx.application.Platform;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -50,6 +52,8 @@ public class SalesController {
         this.primaryStage = primaryStage;
     }
 
+    int userId = SessionManager.getCurrentUser().getId();
+
     @FXML
     public void initialize() {
         configureItemsCombo();
@@ -92,9 +96,9 @@ public class SalesController {
         if (validateInput()) {
             try {
                 Sales sale = createSaleForm();
-                SalesDAO.createSale(sale);
+                SalesDAO.createSale(sale, userId);
                 sales.add(sale);
-                clearForm();
+                clearForm(); // This will reset the ComboBox
             } catch (SQLException e) {
                 showError("Database Error", "Failed to save sale");
             }
@@ -185,7 +189,7 @@ public class SalesController {
 
     private void loadSales() {
         try {
-            sales.setAll(SalesDAO.getAllSales());
+            sales.setAll(SalesDAO.getAllSales(userId));
             salesTable.setItems(sales);
         } catch (SQLException e) {
             showError("Database Error", "Failed to load sales: " + e.getMessage());
@@ -254,7 +258,7 @@ public class SalesController {
 
     private void loadItems() {
         try {
-            itemsCombo.setItems(ItemDAO.getAllItems());
+            itemsCombo.setItems(ItemDAO.getAllItems(userId));
         } catch (SQLException e) {
             showError("Database Error", "Failed to load items");
         }
@@ -275,17 +279,20 @@ public class SalesController {
         double tip = tipField.getText().isEmpty() ? 0.0 : Double.parseDouble(tipField.getText());
         double serviceTax = Double.parseDouble(serviceTaxField.getText());
 
-        return new Sales(0, item, quantity, discount, tip, serviceTax, LocalDateTime.now());
+        return new Sales(0, item, quantity, discount, tip, serviceTax, LocalDateTime.now(), userId);
     }
 
     private void clearForm() {
         itemsCombo.getSelectionModel().clearSelection();
+        itemsCombo.setValue(null);
+        itemsCombo.getEditor().clear();
+        itemsCombo.setEditable(false);
+        Platform.runLater(() -> itemsCombo.setPromptText("Select Item"));
         quantityField.setText("1");
         discountField.clear();
         serviceTaxField.clear();
         tipField.clear();
         totalLabel.setText("");
     }
-
 
 }
