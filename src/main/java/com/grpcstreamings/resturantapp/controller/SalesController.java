@@ -5,7 +5,6 @@ import com.grpcstreamings.resturantapp.dao.SalesDAO;
 import com.grpcstreamings.resturantapp.model.Item;
 import com.grpcstreamings.resturantapp.model.Sales;
 import com.grpcstreamings.resturantapp.util.SessionManager;
-import javafx.application.Platform;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -147,7 +146,17 @@ public class SalesController {
             @Override
             protected void updateItem(Item item, boolean empty) {
                 super.updateItem(item, empty);
-                setText(empty || item == null ? "" : item.getName());
+                if (empty || item == null) {
+                    if (itemsCombo.getPromptText() != null && !itemsCombo.getPromptText().isEmpty()) {
+                        setText(itemsCombo.getPromptText());
+                        setStyle("-fx-text-fill: derive(-fx-control-inner-background, -30%);");
+                    } else {
+                        setText("");
+                    }
+                } else {
+                    setText(item.getName());
+                    setStyle("");
+                }
             }
         });
     }
@@ -283,16 +292,23 @@ public class SalesController {
     }
 
     private void clearForm() {
-        itemsCombo.getSelectionModel().clearSelection();
         itemsCombo.setValue(null);
-        itemsCombo.getEditor().clear();
-        itemsCombo.setEditable(false);
-        Platform.runLater(() -> itemsCombo.setPromptText("Select Item"));
+        itemsCombo.setPromptText("Select Item"); // Explicitly reset
+        itemsCombo.setVisible(false);
+        itemsCombo.setVisible(true); // Explicitly reapply prompt
+        itemsCombo.getStyleClass().add("force-prompt"); // Workaround CSS
         quantityField.setText("1");
         discountField.clear();
         serviceTaxField.clear();
         tipField.clear();
         totalLabel.setText("");
+
+        // JavaFX hack: Toggle visibility to force UI refresh
+        itemsCombo.setVisible(false);
+        itemsCombo.setVisible(true);
+
+        // Force focus shift
+        quantityField.requestFocus();
     }
 
 }

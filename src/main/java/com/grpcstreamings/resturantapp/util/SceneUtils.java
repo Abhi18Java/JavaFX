@@ -17,7 +17,6 @@ public class SceneUtils {
         Scene scene = ((Node) event.getSource()).getScene();
         scene.setRoot(root);
 
-        // For JavaFX 17+ you may need to re-apply CSS
         try {
             scene.getStylesheets().clear();
             scene.getStylesheets().add(
