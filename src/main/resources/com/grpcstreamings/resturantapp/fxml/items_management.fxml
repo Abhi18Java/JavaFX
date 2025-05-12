@@ -13,10 +13,10 @@
         <VBox spacing="10" style="-fx-background-color: #7cb8c4; -fx-padding: 15;">
             <HBox spacing="10" alignment="CENTER_LEFT">
                 <Label text="Items Management" style="-fx-text-fill: white; -fx-font-size: 24; -fx-font-weight: bold;"/>
-                <Button text="Add New Item" style="-fx-background-color: #27ae60; -fx-text-fill: white;" onAction="#handleAddItem"/>
+                <Button text="Add New Item" style="-fx-background-color: #28a745; -fx-text-fill: white;" onAction="#handleAddItem"/>
                 <Button text="Edit Item" style="-fx-background-color: #2980b9; -fx-text-fill: white;" onAction="#handleEditItem"/>
                 <Button text="Delete Item" style="-fx-background-color: #c0392b; -fx-text-fill: white;" onAction="#handleDeleteItem"/>
-                <Button text="Back" onAction="#handleBack" style="-fx-background-color: #95a5a6;"/>
+                <Button text="Back" onAction="#handleBack" style="-fx-background-color: #717575;"/>
             </HBox>
             <TextField fx:id="searchField" promptText="Search items..." style="-fx-background-radius: 15;"/>
         </VBox>

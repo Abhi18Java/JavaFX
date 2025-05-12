@@ -1,3 +1,93 @@
-.combo-box .list-cell:empty {
-    -fx-text-fill: #666;
+/* Menu Items Container */
+#menuItemsContainer {
+    -fx-background-color: #f8f9fa;
+    -fx-padding: 15px;
+}
+
+/* Individual Menu Item */
+.menu-item {
+    -fx-background-color: white;
+    -fx-border-color: #e9ecef;
+    -fx-border-radius: 8px;
+    -fx-background-radius: 8px;
+    -fx-padding: 15px;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.05), 5, 0, 0, 2);
+    -fx-min-width: 100%;
+}
+
+.menu-item:hover {
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 8, 0, 0, 3);
+    -fx-background-color: #f8f9fa;
+    -fx-cursor: hand;
+}
+
+.item-name {
+    -fx-font-size: 20px;
+    -fx-font-weight: 600;
+    -fx-text-fill: #2d3436;
+    -fx-padding: 0 0 5px 0;
+}
+
+/* Base button style */
+.button {
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+    -fx-text-fill: white;
+    -fx-background-radius: 5;
+    -fx-cursor: hand;
+    -fx-padding: 8px 20px;
+    -fx-border-width: 0;
+}
+
+/* Add Button */
+.add-btn {
+    -fx-background-color: #28a745; /* Bootstrap Green */
+}
+
+.add-btn:hover {
+    -fx-background-color: #218838;
+    -fx-effect: dropshadow(three-pass-box, rgba(40,167,69,0.3), 8, 0, 0, 2);
+}
+
+/* Remove Button */
+.remove-btn {
+    -fx-background-color: #dc3545; /* Bootstrap Red */
+}
+
+.remove-btn:hover {
+    -fx-background-color: #c82333;
+    -fx-effect: dropshadow(three-pass-box, rgba(220,53,69,0.3), 6, 0, 0, 2);
+}
+
+/* Remove extra table column */
+.table-view .column-header,
+.table-view .column-header-background {
+    -fx-background-color: #2c3e50;
+}
+
+.table-view .column-header .label {
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-alignment: CENTER;
+    -fx-font-size: 14px;
+    -fx-padding: 8 0 8 0;
+}
+
+.table-view .table-cell {
+    -fx-border-width: 0 0 1 0;
+    -fx-border-color: #dcdde1;
+    -fx-padding: 12px;
+    -fx-alignment: CENTER;
+}
+
+/* Center alignment for table */
+.table-view {
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+}
+
+/* Remove empty column border */
+.table-view .show-hide-columns-button {
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
 }

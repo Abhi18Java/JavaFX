@@ -87,7 +87,7 @@ public class DashboardController {
             Parent root = loader.load();
 
             // Pass primary stage to the secondary controller
-            SalesController salesController = loader.getController();
+            NewSalesController salesController = loader.getController();
             salesController.setPrimaryStage(primaryStage);
 
             // Configure the secondary stage
