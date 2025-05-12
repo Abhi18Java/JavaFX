@@ -95,7 +95,7 @@ public class NewSalesController {
             for (Item item : items) {
                 HBox row = new HBox();
                 row.setSpacing(10);
-                row.setPadding(new Insets(5));
+                row.setPadding(new Insets(8, 15, 8, 15));
                 row.setAlignment(Pos.CENTER_LEFT);
                 row.setStyle("-fx-border-color: lightgray; -fx-border-width: 0 0 1 0;");
                 row.setMaxWidth(Double.MAX_VALUE);
@@ -106,8 +106,11 @@ public class NewSalesController {
                 Region spacer = new Region(); // This pushes buttons to the right
                 HBox.setHgrow(spacer, Priority.ALWAYS);
 
-                Button addBtn = new Button("Add");
-                Button removeBtn = new Button("Remove");
+                Button addBtn = new Button("+");
+                Button removeBtn = new Button("-");
+
+                addBtn.setStyle("-fx-font-size: 18; -fx-font-weight: bold;");
+                removeBtn.setStyle("-fx-font-size: 18; -fx-font-weight: bold;");
 
                 addBtn.getStyleClass().addAll("button", "add-btn");
                 removeBtn.getStyleClass().addAll("button", "remove-btn");

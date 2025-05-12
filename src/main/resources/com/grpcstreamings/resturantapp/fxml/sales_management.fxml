@@ -12,7 +12,7 @@
         <VBox style="-fx-background-color: #7cb8c4; -fx-padding: 15;">
             <HBox spacing="10" alignment="CENTER_LEFT">
                 <Label text="Sales Management" style="-fx-text-fill: white; -fx-font-size: 24;"/>
-                <Button text="Complete Sale" style="-fx-background-color: #27ae60;"/>
+<!--                <Button text="Complete Sale" style="-fx-background-color: #27ae60;"/>-->
                 <Button text="Back" onAction="#handleBack" style="-fx-background-color: #717575;"/>
             </HBox>
         </VBox>
@@ -42,27 +42,32 @@
                 </HBox>
 
                 <!-- Calculation Summary -->
-                <VBox spacing="8" style="-fx-padding: 15; -fx-background-color: #f5f6fa;">
-                    <HBox spacing="10">
-                        <Label text="Balance:" style="-fx-font-weight: bold;"/>
-                        <Label fx:id="balanceLabel" text="0.00"/>
+                <VBox spacing="12" style="-fx-padding: 15; -fx-background-color: #f5f6fa; -fx-background-radius: 8;">
+                    <HBox spacing="15" alignment="CENTER_LEFT">
+                        <Label text="Balance:" style="-fx-font-weight: bold; -fx-font-size: 16;"/>
+                        <Label fx:id="balanceLabel" text="0.00" style="-fx-font-size: 16; -fx-font-weight: bold;"/>
                     </HBox>
-                    <HBox spacing="10">
-                        <Label text="Discount (%):"/>
-                        <TextField fx:id="discountField" style="-fx-max-width: 80;"/>
+
+                    <HBox spacing="15" alignment="CENTER_LEFT">
+                        <Label text="Discount (%):" style="-fx-font-size: 16;"/>
+                        <TextField fx:id="discountField" style="-fx-font-size: 16; -fx-pref-width: 100; -fx-pref-height: 30;"/>
                     </HBox>
-                    <HBox spacing="10">
-                        <Label text="VAT (13%):"/>
-                        <Label fx:id="vatLabel" text="0.00"/>
+
+                    <HBox spacing="15" alignment="CENTER_LEFT">
+                        <Label text="VAT (13%):" style="-fx-font-size: 16;"/>
+                        <Label fx:id="vatLabel" text="0.00" style="-fx-font-size: 16; -fx-font-weight: bold;"/>
                     </HBox>
-                    <HBox spacing="10">
-                        <Label text="Tip:"/>
-                        <TextField fx:id="tipField" style="-fx-max-width: 80;"/>
+
+                    <HBox spacing="15" alignment="CENTER_LEFT">
+                        <Label text="Tip:" style="-fx-font-size: 16;"/>
+                        <TextField fx:id="tipField" style="-fx-font-size: 16; -fx-pref-width: 100; -fx-pref-height: 30;"/>
                     </HBox>
-                    <Separator/>
-                    <HBox spacing="10">
-                        <Label text="Total Amount:" style="-fx-font-weight: bold;"/>
-                        <Label fx:id="totalLabel" text="0.00" style="-fx-text-fill: #27ae60;"/>
+
+                    <Separator style="-fx-padding: 5 0 5 0;"/>
+
+                    <HBox spacing="15" alignment="CENTER_LEFT">
+                        <Label text="Total Amount:" style="-fx-font-weight: bold; -fx-font-size: 18;"/>
+                        <Label fx:id="totalLabel" text="0.00" style="-fx-font-size: 18; -fx-font-weight: bold; -fx-text-fill: #27ae60;"/>
                     </HBox>
                 </VBox>
             </VBox>

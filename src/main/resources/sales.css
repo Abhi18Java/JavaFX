@@ -33,7 +33,7 @@
     -fx-font-size: 14px;
     -fx-font-weight: bold;
     -fx-text-fill: white;
-    -fx-background-radius: 5;
+    -fx-background-radius: 20px;
     -fx-cursor: hand;
     -fx-padding: 8px 20px;
     -fx-border-width: 0;
@@ -41,24 +41,33 @@
 
 /* Add Button */
 .add-btn {
-    -fx-background-color: #28a745; /* Bootstrap Green */
+    -fx-background-color: #28a745;
+     -fx-text-fill: white;
+         -fx-font-size: 18px !important;
+         -fx-font-weight: bold;
 }
 
 .add-btn:hover {
     -fx-background-color: #218838;
-    -fx-effect: dropshadow(three-pass-box, rgba(40,167,69,0.3), 8, 0, 0, 2);
+    -fx-effect: dropshadow(three-pass-box, rgba(40,167,69,0.4), 8, 0, 0, 2);
+    -fx-scale-x: 1.05;
+    -fx-scale-y: 1.05;
 }
 
 /* Remove Button */
 .remove-btn {
-    -fx-background-color: #dc3545; /* Bootstrap Red */
+    -fx-background-color: #dc3545;
+    -fx-text-fill: white;
+    -fx-font-size: 18px !important;
+    -fx-font-weight: bold;
 }
 
 .remove-btn:hover {
     -fx-background-color: #c82333;
-    -fx-effect: dropshadow(three-pass-box, rgba(220,53,69,0.3), 6, 0, 0, 2);
+    -fx-effect: dropshadow(three-pass-box, rgba(220,53,69,0.4), 8, 0, 0, 2);
+    -fx-scale-x: 1.05;
+    -fx-scale-y: 1.05;
 }
-
 /* Remove extra table column */
 .table-view .column-header,
 .table-view .column-header-background {
