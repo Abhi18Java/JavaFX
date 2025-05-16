@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
+
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
-<?import javafx.scene.text.*?>
-
 <BorderPane xmlns="http://javafx.com/javafx/17"
             xmlns:fx="http://javafx.com/fxml/1"
             fx:controller="com.grpcstreamings.resturantapp.controller.NewSalesController"
@@ -12,7 +11,6 @@
         <VBox style="-fx-background-color: #7cb8c4; -fx-padding: 15;">
             <HBox spacing="10" alignment="CENTER_LEFT">
                 <Label text="Sales Management" style="-fx-text-fill: white; -fx-font-size: 24;"/>
-<!--                <Button text="Complete Sale" style="-fx-background-color: #27ae60;"/>-->
                 <Button text="Back" onAction="#handleBack" style="-fx-background-color: #717575;"/>
             </HBox>
         </VBox>
@@ -68,6 +66,10 @@
                     <HBox spacing="15" alignment="CENTER_LEFT">
                         <Label text="Total Amount:" style="-fx-font-weight: bold; -fx-font-size: 18;"/>
                         <Label fx:id="totalLabel" text="0.00" style="-fx-font-size: 18; -fx-font-weight: bold; -fx-text-fill: #27ae60;"/>
+                        <Button fx:id="completeSaleBtn"
+                                text="Complete Sale"
+                        onAction="#handleCompleteSale"
+                        style="-fx-font-size: 16; -fx-background-color: #27ae60; -fx-text-fill: white; -fx-padding: 8 15;"/>
                     </HBox>
                 </VBox>
             </VBox>

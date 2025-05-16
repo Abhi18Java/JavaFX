@@ -19,14 +19,19 @@
     <center>
         <StackPane>
             <VBox alignment="TOP_LEFT" spacing="20">
+                <Button text="New Sale"
+                        fx:id="newSaleBtn"
+                        onAction="#handleSalesManagement"
+                        styleClass="vending-style"/>
+
+                <Button text="Sales Book"
+                        fx:id="salesBookBtn"
+                        onAction="#handleSaleBook"
+                        styleClass="vending-style"/>
+
                 <Button text="Manage Items"
                         fx:id="manageItemsBtn"
                         onAction="#handleItemsManagement"
-                        styleClass="vending-style"/>
-
-                <Button text="Manage Sales"
-                        fx:id="manageSalesBtn"
-                        onAction="#handleSalesManagement"
                         styleClass="vending-style"/>
 
 

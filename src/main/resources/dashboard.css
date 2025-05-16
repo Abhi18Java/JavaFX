@@ -1,8 +1,9 @@
 .root {
-    -fx-background-image: url("icons/background.png");
+    -fx-background-image: url("icons/logint.png");
     -fx-background-repeat: no-repeat;
     -fx-background-size: cover;
     -fx-background-position: center center;
+    -fx-background-color: null;
 }
 
 .vending-style {
@@ -17,6 +18,7 @@
     -fx-border-width: 2;
     -fx-cursor: hand;
     -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.3), 8, 0.3, 0, 4);
+    -fx-pref-width: 220px;
 }
 
 .logout-button {

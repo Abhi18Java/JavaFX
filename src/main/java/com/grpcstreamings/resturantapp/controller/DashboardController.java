@@ -111,8 +111,38 @@ public class DashboardController {
     }
 
     @FXML
-    private void handleReports() {
+    private void handleSaleBook(ActionEvent event) {
+        try {
+            Stage primaryStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+            primaryStage.hide();
 
+            FXMLLoader loader = new FXMLLoader(getClass().getResource(
+                    "/com/grpcstreamings/resturantapp/fxml/sales_book.fxml"
+            ));
+            Parent root = loader.load();
+
+            // Pass primary stage to the secondary controller
+            SalesBookController salesBookController = loader.getController();
+            salesBookController.setPrimaryStage(primaryStage);
+
+            // Configure the secondary stage
+            Stage secondaryStage = new Stage();
+            secondaryStage.setScene(new Scene(root));
+            secondaryStage.setTitle("Sales History");
+            secondaryStage.setMaximized(true);
+            secondaryStage.getIcons().add(new Image(
+                    Objects.requireNonNull(getClass().getResourceAsStream("/icons/icon.png"))
+            ));
+
+            secondaryStage.setOnCloseRequest(e -> {
+                primaryStage.show();
+            });
+
+            secondaryStage.show();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     private boolean showConfirmation(String title, String message) {

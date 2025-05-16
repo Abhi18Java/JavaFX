@@ -25,7 +25,7 @@
                            maxWidth="200"/>
         </GridPane>
 
-        <Button text="Login" onAction="#handleLogin"
+        <Button text="Login" onAction="#handleLogin" defaultButton="true"
                 style="-fx-font-size: 14; -fx-pref-width: 150; -fx-max-width: 150;"/>
 
         <HBox alignment="CENTER" spacing="10" GridPane.rowIndex="2" GridPane.columnSpan="2">

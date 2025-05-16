@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<BorderPane xmlns="http://javafx.com/javafx/17"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="com.grpcstreamings.resturantapp.controller.SalesBookController"
+            stylesheets="@/salesbook.css">
+
+    <top>
+        <VBox spacing="10" style="-fx-background-color: #7cb8c4; -fx-padding: 15;">
+            <HBox>
+                <Label text="Sales Book" style="-fx-text-fill: white; -fx-font-size: 24;"/>
+                <Pane HBox.hgrow="ALWAYS"/>
+                <Button text="Back" onAction="#handleBack" styleClass="back-button"/>
+            </HBox>
+        </VBox>
+    </top>
+
+    <center>
+        <TableView fx:id="salesTable" style="-fx-padding: 20;">
+            <columns>
+                <TableColumn text="Sale ID" fx:id="saleIdCol" prefWidth="80"/>
+                <TableColumn text="Date" fx:id="dateCol" prefWidth="150"/>
+                <TableColumn text="Total Amount" fx:id="totalCol" prefWidth="120"/>
+                <TableColumn text="Discount" fx:id="discountCol" prefWidth="100"/>
+                <TableColumn text="Tip" fx:id="tipCol" prefWidth="100"/>
+                <TableColumn text="Tax" fx:id="taxCol" prefWidth="100"/>
+                <TableColumn text="Items" fx:id="itemsCol" prefWidth="120"/>
+                <TableColumn text="Actions" fx:id="actionCol" prefWidth="100"/>
+            </columns>
+            <columnResizePolicy>
+                <TableView fx:constant="CONSTRAINED_RESIZE_POLICY"/>
+            </columnResizePolicy>
+        </TableView>
+    </center>
+</BorderPane>

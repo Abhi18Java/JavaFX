@@ -20,6 +20,12 @@ public class Item {
         this.vat.set(vat);
     }
 
+    public Item(int itemId, String name, double unitPrice) {
+        this.id.set(itemId);
+        this.name.set(name);
+        this.price.set(unitPrice);
+    }
+
     // Property getters
     public SimpleIntegerProperty idProperty() {
         return id;

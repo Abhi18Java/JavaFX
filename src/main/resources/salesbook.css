@@ -1,0 +1,21 @@
+.back-button {
+    -fx-background-color: #717575;
+    -fx-text-fill: white;
+    -fx-font-size: 14px;
+    -fx-padding: 6 12;
+    -fx-background-radius: 5;
+    -fx-cursor: hand;
+}
+
+.table-view {
+    -fx-padding: 20;
+    -fx-table-cell-border-color: transparent;
+}
+
+.label {
+    -fx-text-fill: white;
+}
+
+.root {
+    -fx-font-family: "Segoe UI", sans-serif;
+}

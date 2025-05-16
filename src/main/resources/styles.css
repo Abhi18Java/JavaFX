@@ -1,5 +1,6 @@
 /* Global Styles */
 .root {
+    -fx-background-image: url("icons/background.png");
     -fx-font-family: 'Segoe UI';
     -fx-font-size: 14px;
 }

@@ -1,21 +1,30 @@
 package com.grpcstreamings.resturantapp.controller;
 
 import com.grpcstreamings.resturantapp.dao.ItemDAO;
+import com.grpcstreamings.resturantapp.dao.SalesDAO;
 import com.grpcstreamings.resturantapp.model.Item;
+import com.grpcstreamings.resturantapp.model.SaleHeader;
+import com.grpcstreamings.resturantapp.model.SaleItem;
 import com.grpcstreamings.resturantapp.util.CartItem;
 import com.grpcstreamings.resturantapp.util.SessionManager;
 import javafx.beans.Observable;
 import javafx.beans.binding.Bindings;
 import javafx.beans.binding.DoubleBinding;
+import javafx.beans.property.BooleanProperty;
+import javafx.beans.property.SimpleBooleanProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.TextFieldTableCell;
+import javafx.scene.image.Image;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.Region;
@@ -23,7 +32,10 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import javafx.util.converter.IntegerStringConverter;
 
+import java.io.IOException;
 import java.sql.SQLException;
+import java.time.LocalDateTime;
+import java.util.Objects;
 
 public class NewSalesController {
 
@@ -48,6 +60,12 @@ public class NewSalesController {
     @FXML
     private Label totalLabel;
 
+    @FXML
+    private Button completeSaleBtn;
+
+    private final BooleanProperty isEditMode = new SimpleBooleanProperty(false);
+    private SaleHeader existingSale;
+
     private Stage primaryStage;
 
     int userId = SessionManager.getCurrentUser().getId();
@@ -66,6 +84,27 @@ public class NewSalesController {
         configureCartTable();
         loadItems();
         setupCalculations();
+
+        completeSaleBtn.textProperty().bind(
+                Bindings.when(isEditMode)
+                        .then("Update Sale")
+                        .otherwise("Complete Sale")
+        );
+    }
+
+    public void initializeForEdit(SaleHeader sale) {
+        this.isEditMode.set(true);
+        this.existingSale = sale;
+
+        // Load existing items into cart
+        sale.getItems().forEach(saleItem -> {
+            CartItem cartItem = new CartItem(saleItem.getItem(), saleItem.getQuantity());
+            cartItems.add(cartItem);
+        });
+
+        // Set other fields
+        discountField.setText(String.valueOf(sale.getDiscount()));
+        tipField.setText(String.valueOf(sale.getTip()));
     }
 
     private void configureCartTable() {
@@ -153,7 +192,7 @@ public class NewSalesController {
     private void setupCalculations() {
         // Balance = sum of all items' totals
         DoubleBinding balance = Bindings.createDoubleBinding(() ->
-                cartItems.stream().mapToDouble(CartItem::getTotal).sum(),cartItems);
+                cartItems.stream().mapToDouble(CartItem::getTotal).sum(), cartItems);
 
         DoubleBinding discount = Bindings.createDoubleBinding(() -> {
             try {
@@ -167,10 +206,10 @@ public class NewSalesController {
         DoubleBinding vat = balance.multiply(0.13);
 
         // Tip calculation
-        DoubleBinding tip = Bindings.createDoubleBinding(()-> {
+        DoubleBinding tip = Bindings.createDoubleBinding(() -> {
             try {
                 return Double.parseDouble(tipField.getText());
-            }catch (NumberFormatException e) {
+            } catch (NumberFormatException e) {
                 return 0.0;
             }
         }, tipField.textProperty());
@@ -187,6 +226,124 @@ public class NewSalesController {
     }
 
     @FXML
+    public void handleCompleteSale(ActionEvent event) {
+        if (cartItems.isEmpty()) {
+            showError("Empty Cart", "Please add Items to the cart");
+            return;
+        }
+        try {
+            double subtotal = cartItems.stream()
+                    .mapToDouble(CartItem::getTotal)
+                    .sum();
+            double discount = tryParseDouble(discountField.getText(), 0.0);
+            double tip = tryParseDouble(tipField.getText(), 0.0);
+            double vat = subtotal * 0.13;
+            double total = subtotal - discount + vat + tip;
+
+            ObservableList<SaleItem> saleItems = FXCollections.observableArrayList();
+            for (CartItem cartItem : cartItems) {
+                Item item = cartItem.getItem();
+                saleItems.add(new SaleItem(
+                        item,
+                        cartItem.getQuantity(),
+                        item.getPrice()
+                ));
+            }
+
+            SaleHeader saleHeader = new SaleHeader(
+                    isEditMode.get() ? existingSale.getSaleId() : 0,
+                    isEditMode.get() ? existingSale.getSaleDate() : LocalDateTime.now(),
+                    subtotal,
+                    discount,
+                    tip,
+                    vat,
+                    total,
+                    userId,
+                    saleItems
+            );
+
+            if (isEditMode.get()) {
+                SalesDAO.updateSale(saleHeader);
+            } else {
+                SalesDAO.saveSale(saleHeader);
+            }
+
+            // Reset UI
+            cartItems.clear();
+            discountField.clear();
+            tipField.clear();
+
+            if (isEditMode.get()) {
+                try {
+                    // Close current window
+                    Stage currentStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+                    currentStage.close();
+
+                    // Reload Sales Book
+                    FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/grpcstreamings/resturantapp/fxml/sales_book.fxml"));
+                    Parent root = loader.load();
+
+                    // Get controller and refresh
+                    SalesBookController bookController = loader.getController();
+                    bookController.refreshSalesData();
+
+                    Stage newStage = new Stage();
+                    newStage.setScene(new Scene(root));
+                    newStage.setMaximized(true);
+                    newStage.getIcons().add(new Image(
+                            Objects.requireNonNull(getClass().getResourceAsStream("/icons/icon.png"))
+                    ));
+                    newStage.show();
+
+                } catch (IOException e) {
+                    showError("Navigation Error", "Failed to load sales book: " + e.getMessage());
+                }
+            }
+
+        } catch (SQLException e) {
+            showError("Database Error", "Failed to save sale: " + e.getMessage());
+            e.printStackTrace(); // Log for debugging
+        } catch (NumberFormatException e) {
+            showError("Input Error", "Invalid number format in discount/tip fields");
+        } catch (Exception e) {
+            showError("Error", "Unexpected error: " + e.getMessage());
+            e.printStackTrace();
+        }
+    }
+
+    private void showSalesBook() {
+        try {
+            Stage stage = new Stage();
+            Parent root = FXMLLoader.load(getClass().getResource("/com/grpcstreamings/resturantapp/fxml/sales_book.fxml"));
+            stage.setScene(new Scene(root));
+            stage.show();
+        } catch (IOException e) {
+            showError("Navigation Error", "Failed to open sales book");
+        }
+    }
+
+    private SaleCalculation computeSaleTotals() {
+        double subtotal = cartItems.stream()
+                .mapToDouble(CartItem::getTotal)
+                .sum();
+
+        double discount = tryParseDouble(discountField.getText(), 0.0);
+        double tip = tryParseDouble(tipField.getText(), 0.0);
+        double vat = subtotal * 0.13;
+        double total = subtotal - discount + vat + tip;
+
+        return new SaleCalculation(subtotal, discount, tip, vat, total);
+    }
+
+    private double tryParseDouble(String value, double defaultValue) {
+        try {
+            return Double.parseDouble(value.isEmpty() ? "0" : value);
+        } catch (NumberFormatException e) {
+            return defaultValue;
+        }
+    }
+
+    @FXML
     private void handleBack(ActionEvent event) {
         primaryStage.show();
         Stage currentStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
@@ -195,6 +352,26 @@ public class NewSalesController {
 
     private void showError(String title, String message) {
         Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setTitle(title);
+        alert.setHeaderText(null);
+        alert.setContentText(message);
+        alert.showAndWait();
+    }
+
+    private static class SaleCalculation {
+        final double subtotal, discount, tip, vat, total;
+
+        public SaleCalculation(double subtotal, double discount, double tip, double vat, double total) {
+            this.subtotal = subtotal;
+            this.discount = discount;
+            this.tip = tip;
+            this.vat = vat;
+            this.total = total;
+        }
+    }
+
+    private static void showAlert(String title, String message, Alert.AlertType type) {
+        Alert alert = new Alert(type);
         alert.setTitle(title);
         alert.setHeaderText(null);
         alert.setContentText(message);
